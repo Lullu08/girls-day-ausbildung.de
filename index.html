@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- TASK 1: Ändere den Seitentitel -->
+    <title>Girls Day – Web-Workshop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+    <header class="site-header">
+      <div class="wrap">
+        <p class="eyebrow">Girls Day · Einstieg ins Web</p>
+        <!-- TASK 1: Überschrift anpassen -->
+        <h1 id="hero-heading">Dein kleines Web-Projekt</h1>
+        <p class="lede">
+          Bearbeite die Dateien in diesem Ordner und sieh dir die Seite im Browser
+          an. Alle Aufgaben stehen in
+          <a href="TASKS.md">TASKS.md</a> (in deinem Editor öffnen).
+        </p>
+      </div>
+    </header>
+
+    <main id="main" class="wrap">
+      <!-- TASK 2: Eigenen Absatz, Liste oder Link ergänzen -->
+      <section class="card" aria-labelledby="about-heading">
+        <h2 id="about-heading">Über mich</h2>
+        <p id="about-text">
+          Hier kann später dein Text stehen – zum Beispiel dein Name, deine
+          Lieblingsfarbe oder was du heute lernen willst.
+        </p>
+      </section>
+
+      <!-- TASK 4: Eigene Klasse z. B. highlight-box nutzen oder neue bauen -->
+      <section class="card task-box" aria-labelledby="tasks-note">
+        <h2 id="tasks-note">Aufgaben</h2>
+        <p>
+          Die Schritt-für-Schritt-Aufgaben findest du in
+          <strong>TASKS.md</strong>. Du arbeitest an
+          <code>index.html</code>, <code>css/styles.css</code> und
+          <code>js/main.js</code>.
+        </p>
+      </section>
+
+      <section class="card interactive" aria-labelledby="js-heading">
+        <h2 id="js-heading">JavaScript ausprobieren</h2>
+        <p id="js-message" class="js-message">
+          Klick den Button – hier passiert gleich etwas (siehe Aufgaben 5 &amp; 6).
+        </p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="action-btn">
+            Aktion
+          </button>
+          <button type="button" class="btn btn-ghost" id="counter-btn" hidden>
+            Zähler
+          </button>
+        </div>
+        <p class="counter-display" id="counter-display" hidden>
+          Zähler: <span id="counter-value">0</span>
+        </p>
+      </section>
+
+      <section class="card api-zone" aria-labelledby="api-heading">
+        <h2 id="api-heading">API-Experiment (Aufgabe 7)</h2>
+        <p class="api-hint">
+          Später holst du hier Daten von einer API und zeigst sie an –
+          zum Beispiel ein Pokémon.
+        </p>
+        <button type="button" class="btn btn-primary" id="pokemon-btn">
+          Pokémon laden
+        </button>
+        <div id="api-output" class="api-output" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>
+          Viel Spaß beim Basteln – frag Mentoren, wenn etwas klemmt.
+        </p>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

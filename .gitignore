@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Optional local tooling
+*.log
+.env
+.env.*
