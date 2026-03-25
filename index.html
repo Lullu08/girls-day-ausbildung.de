@@ -14,6 +14,17 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
+    <div class="parallax" aria-hidden="true">
+      <div class="parallax__anchor parallax__anchor--1">
+        <span class="parallax__blob parallax__blob--1"></span>
+      </div>
+      <div class="parallax__anchor parallax__anchor--2">
+        <span class="parallax__blob parallax__blob--2"></span>
+      </div>
+      <div class="parallax__anchor parallax__anchor--3">
+        <span class="parallax__blob parallax__blob--3"></span>
+      </div>
+    </div>
     <a class="skip-link" href="#main">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="wrap">
@@ -30,7 +41,7 @@
 
     <main id="main" class="wrap">
       <!-- TASK 2: Eigenen Absatz, Liste oder Link ergänzen -->
-      <section class="card" aria-labelledby="about-heading">
+      <section class="card reveal-card" aria-labelledby="about-heading">
         <h2 id="about-heading">Über mich</h2>
         <p id="about-text">
           Hier kann später dein Text stehen – zum Beispiel dein Name, deine
@@ -39,7 +50,7 @@
       </section>
 
       <!-- TASK 4: Eigene Klasse z. B. highlight-box nutzen oder neue bauen -->
-      <section class="card task-box" aria-labelledby="tasks-note">
+      <section class="card task-box reveal-card" aria-labelledby="tasks-note">
         <h2 id="tasks-note">Aufgaben</h2>
         <p>
           Die Schritt-für-Schritt-Aufgaben findest du in
@@ -49,7 +60,7 @@
         </p>
       </section>
 
-      <section class="card interactive" aria-labelledby="js-heading">
+      <section class="card interactive reveal-card" aria-labelledby="js-heading">
         <h2 id="js-heading">JavaScript ausprobieren</h2>
         <p id="js-message" class="js-message">
           Klick den Button – hier passiert gleich etwas (siehe Aufgaben 5 &amp; 6).
@@ -67,7 +78,7 @@
         </p>
       </section>
 
-      <section class="card api-zone" aria-labelledby="api-heading">
+      <section class="card api-zone reveal-card" aria-labelledby="api-heading">
         <h2 id="api-heading">API-Experiment (Aufgabe 7)</h2>
         <p class="api-hint">
           Später holst du hier Daten von einer API und zeigst sie an –

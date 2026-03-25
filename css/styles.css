@@ -40,9 +40,35 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blob-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(2%, -3%) scale(1.05);
+  }
+  66% {
+    transform: translate(-3%, 2%) scale(0.97);
+  }
+}
+
 body {
   margin: 0;
   min-height: 100vh;
+  position: relative;
+  overflow-x: clip;
   font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.55;
@@ -51,6 +77,88 @@ body {
     radial-gradient(120% 80% at 10% -10%, rgb(14 116 144 / 12%), transparent 55%),
     radial-gradient(90% 60% at 100% 0%, rgb(194 65 12 / 8%), transparent 50%),
     var(--color-bg);
+}
+
+/* Dekorative Parallax-Ebenen (langsamer Hintergrund) */
+.parallax {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.parallax__anchor {
+  position: absolute;
+  animation: blob-drift 22s ease-in-out infinite;
+}
+
+.parallax__anchor--1 {
+  width: min(42vmin, 22rem);
+  height: min(42vmin, 22rem);
+  top: -8%;
+  right: -12%;
+  animation-delay: 0s;
+}
+
+.parallax__anchor--2 {
+  width: min(55vmin, 28rem);
+  height: min(55vmin, 28rem);
+  bottom: 15%;
+  left: -18%;
+  animation-delay: -7s;
+  animation-duration: 28s;
+}
+
+.parallax__anchor--3 {
+  width: min(32vmin, 16rem);
+  height: min(32vmin, 16rem);
+  top: 42%;
+  right: 8%;
+  animation-delay: -14s;
+  animation-duration: 18s;
+}
+
+.parallax__blob {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.parallax__blob--1 {
+  background: radial-gradient(circle at 30% 30%, rgb(14 116 144 / 45%), rgb(194 65 12 / 25%) 70%, transparent 100%);
+}
+
+.parallax__blob--2 {
+  background: radial-gradient(circle at 60% 40%, rgb(194 65 12 / 35%), rgb(14 116 144 / 22%) 65%, transparent 100%);
+}
+
+.parallax__blob--3 {
+  background: radial-gradient(circle, rgb(14 116 144 / 30%), transparent 70%);
+  opacity: 0.4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .parallax__blob {
+    opacity: 0.38;
+  }
+
+  .parallax__blob--1 {
+    background: radial-gradient(circle at 30% 30%, rgb(34 211 238 / 22%), rgb(251 146 60 / 18%) 70%, transparent 100%);
+  }
+
+  .parallax__blob--2 {
+    background: radial-gradient(circle at 60% 40%, rgb(251 146 60 / 20%), rgb(34 211 238 / 14%) 65%, transparent 100%);
+  }
+
+  .parallax__blob--3 {
+    background: radial-gradient(circle, rgb(34 211 238 / 18%), transparent 70%);
+    opacity: 0.32;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -84,8 +192,28 @@ body {
 }
 
 .site-header {
+  position: relative;
+  z-index: 1;
   padding: calc(var(--space) * 2.25) 0 calc(var(--space) * 1.5);
   border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(8px);
+  background: linear-gradient(
+    to bottom,
+    rgb(246 243 238 / 88%),
+    rgb(246 243 238 / 55%),
+    transparent
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  .site-header {
+    background: linear-gradient(
+      to bottom,
+      rgb(28 25 23 / 92%),
+      rgb(28 25 23 / 60%),
+      transparent
+    );
+  }
 }
 
 .eyebrow {
@@ -95,6 +223,7 @@ body {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-accent);
+  animation: fade-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .site-header h1 {
@@ -104,12 +233,14 @@ body {
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.02em;
+  animation: fade-rise 0.72s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both;
 }
 
 .lede {
   margin: 0;
   max-width: 36ch;
   color: var(--color-muted);
+  animation: fade-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
 }
 
 .lede a {
@@ -123,6 +254,8 @@ body {
 }
 
 main {
+  position: relative;
+  z-index: 1;
   padding: var(--space) 0 calc(var(--space) * 2.5);
   display: flex;
   flex-direction: column;
@@ -135,6 +268,55 @@ main {
   border-radius: var(--radius);
   padding: var(--space);
   box-shadow: var(--shadow);
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease;
+}
+
+.card:hover {
+  border-color: rgb(14 116 144 / 22%);
+  box-shadow:
+    0 22px 48px rgb(28 25 23 / 10%),
+    0 0 0 1px rgb(14 116 144 / 8%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .card:hover {
+    border-color: rgb(34 211 238 / 18%);
+    box-shadow:
+      0 24px 56px rgb(0 0 0 / 40%),
+      0 0 0 1px rgb(34 211 238 / 10%);
+  }
+}
+
+.reveal-card {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-card:nth-child(1) {
+  transition-delay: 0.02s;
+}
+
+.reveal-card:nth-child(2) {
+  transition-delay: 0.1s;
+}
+
+.reveal-card:nth-child(3) {
+  transition-delay: 0.18s;
+}
+
+.reveal-card:nth-child(4) {
+  transition-delay: 0.26s;
 }
 
 .card h2 {
@@ -177,7 +359,10 @@ main {
   border-radius: 999px;
   padding: 0.55rem 1.15rem;
   cursor: pointer;
-  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.12s ease,
+    box-shadow 0.25s ease;
 }
 
 .btn:focus-visible {
@@ -196,6 +381,13 @@ main {
 
 .btn-primary:hover {
   background: var(--color-primary-hover);
+  box-shadow: 0 10px 28px rgb(194 65 12 / 28%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-primary:hover {
+    box-shadow: 0 10px 28px rgb(251 146 60 / 22%);
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -274,8 +466,39 @@ code {
 }
 
 .site-footer {
+  position: relative;
+  z-index: 1;
   padding: var(--space) 0 calc(var(--space) * 1.5);
   border-top: 1px solid var(--color-border);
+  animation: fade-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax__anchor {
+    animation: none;
+  }
+
+  .site-header .eyebrow,
+  .site-header h1,
+  .lede,
+  .site-footer {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal-card:nth-child(1),
+  .reveal-card:nth-child(2),
+  .reveal-card:nth-child(3),
+  .reveal-card:nth-child(4) {
+    transition-delay: 0s;
+  }
 }
 
 .site-footer p {

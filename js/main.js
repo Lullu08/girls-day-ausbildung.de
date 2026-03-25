@@ -6,6 +6,70 @@
 (function () {
   "use strict";
 
+  function initParallaxBlobs() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    const blobs = document.querySelectorAll(".parallax__blob");
+    if (!blobs.length) {
+      return;
+    }
+    const speeds = [0.11, 0.06, 0.14];
+    let ticking = false;
+    function applyScroll() {
+      const y = window.scrollY || window.pageYOffset;
+      blobs.forEach(function (blob, i) {
+        var s = speeds[i] !== undefined ? speeds[i] : 0.09;
+        blob.style.transform = "translate3d(0, " + y * s + "px, 0)";
+      });
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(applyScroll);
+        ticking = true;
+      }
+    }
+    applyScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  function initRevealCards() {
+    var cards = document.querySelectorAll(".reveal-card");
+    if (!cards.length) {
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cards.forEach(function (el) {
+        el.classList.add("is-visible");
+      });
+      return;
+    }
+    if (!("IntersectionObserver" in window)) {
+      cards.forEach(function (el) {
+        el.classList.add("is-visible");
+      });
+      return;
+    }
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.06 }
+    );
+    cards.forEach(function (c) {
+      io.observe(c);
+    });
+  }
+
+  initParallaxBlobs();
+  initRevealCards();
+
   const actionBtn = document.getElementById("action-btn");
   const jsMessage = document.getElementById("js-message");
   const counterBtn = document.getElementById("counter-btn");
