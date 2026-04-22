@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Dev Einführung</title>
+    <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Source+Sans+3:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap)" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #f6f3ee;
+            --color-surface: #ffffff;
+            --color-text: #1c1917;
+            --color-muted: #57534e;
+            --color-primary: #c2410c;
+            --color-primary-hover: #9a3412;
+            --color-accent: #0e7490;
+            --color-accent-light: #22d3ee;
+            --color-border: #e7e5e4;
+            --color-success: #16a34a;
+            --color-warning: #eab308;
+            --radius: 20px;
+            --radius-sm: 12px;
+            --shadow: 0 25px 50px -12px rgb(28 25 23 / 15%);
+            --shadow-sm: 0 10px 25px -5px rgb(28 25 23 / 10%);
+            --font-display: "Fraunces", Georgia, serif;
+            --font-body: "Source Sans 3", system-ui, sans-serif;
+            --font-code: "Fira Code", "Courier New", monospace;
+            --space: clamp(1.5rem, 5vw, 3rem);
+            --max: 70rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-bg: #1c1917;
+                --color-surface: #292524;
+                --color-text: #fafaf9;
+                --color-muted: #a8a29e;
+                --color-primary: #fb923c;
+                --color-accent: #0e7490;
+                --color-accent-light: #22d3ee;
+                --color-border: #44403c;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            background: radial-gradient(120% 80% at 10% -10%, rgb(14 116 144 / 15%), transparent 55%), var(--color-bg);
+            overflow: hidden;
+        }
+
+        .card-fancy > button {
+            &:hover {
+                transform: scale(1.05);
+                transition: transform 0.3s ease;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--color-border);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent-light));
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .progress-text {
+            position: fixed;
+            top: 12px;
+            right: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-muted);
+            z-index: 1000;
+        }
+
+        .slide-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space);
+            padding-bottom: 120px;
+        }
+
+        .slide {
+            display: none;
+            width: min(100%, var(--max));
+            max-height: calc(100vh - 180px);
+            overflow-y: auto;
+            animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .slide.active { 
+            display: block; 
+        }
+
+        .slide::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .slide::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 4px;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { 
+            font-family: var(--font-display); 
+            font-size: clamp(2.5rem, 8vw, 4rem); 
+            line-height: 1.1; 
+            margin: 0 0 1.5rem 0;
+            font-weight: 900;
+        }
+
+        h2 { 
+            font-family: var(--font-display); 
+            font-size: clamp(1.8rem, 5vw, 2.5rem); 
+            margin: 0 0 1.5rem 0; 
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        h3 { 
+            font-size: 1.4rem; 
+            margin: 0 0 0.75rem 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0 0 1rem 0;
+        }
+
+        .eyebrow { 
+            color: var(--color-accent); 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            font-size: 0.95rem; 
+            letter-spacing: 2px; 
+            margin-bottom: 0.75rem; 
+            display: block; 
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #1e1e1e;
+            color: #e0e0e0;
+            border-radius: var(--radius-sm);
+            padding: 1.25rem 1.5rem;
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--color-accent);
+            text-align: left;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .code-block.html { border-left-color: #e34c26; }
+        .code-block.css { border-left-color: #264de4; }
+        .code-block.js { border-left-color: #f7df1e; }
+
+        .code-inline {
+            background: rgba(14, 116, 144, 0.15);
+            color: var(--color-accent);
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+            font-family: var(--font-code);
+            font-size: 0.9em;
+        }
+
+        /* Syntax Highlighting */
+        .tag { color: #569cd6; }
+        .attr { color: #9cdcfe; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+        .keyword { color: #c586c0; }
+        .function { color: #dcdcaa; }
+        .variable { color: #9cdcfe; }
+        .property { color: #4fc1ff; }
+        .number { color: #b5cea8; }
+        .operator { color: #d4d4d4; }
+
+        /* Grid Layouts */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 1.5rem; 
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card { 
+            background: var(--color-surface); 
+            padding: 1.5rem; 
+            border-radius: var(--radius); 
+            border: 1px solid var(--color-border); 
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-highlight {
+            border-top: 4px solid var(--color-primary);
+        }
+
+        .card-accent {
+            border-left: 4px solid var(--color-accent);
+        }
+
+        /* Tag Pills */
+        .tag-pill {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin: 0.2rem;
+        }
+
+        .tag-html { background: #e34c2620; color: #e34c26; }
+        .tag-css { background: #264de420; color: #264de4; }
+        .tag-js { background: #f7df1e20; color: #b8a800; }
+
+        /* Icon Boxes */
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-html { background: linear-gradient(135deg, #e34c26, #f06529); }
+        .icon-css { background: linear-gradient(135deg, #264de4, #2965f1); }
+        .icon-js { background: linear-gradient(135deg, #f7df1e, #e8d21d); }
+        .icon-browser { background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light)); }
+
+        /* Comparison Cards */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .comparison-arrow {
+            font-size: 2rem;
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            .comparison-arrow {
+                transform: rotate(90deg);
+                justify-self: center;
+            }
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--color-surface);
+            border: 3px solid var(--color-primary);
+            border-radius: 50%;
+            transform: translateX(-4.5px);
+        }
+
+        .timeline-year {
+            font-weight: 800;
+            color: var(--color-primary);
+            font-size: 1rem;
+        }
+
+        /* Flow Diagram */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .flow-box {
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .flow-box.highlight {
+            border-color: var(--color-primary);
+            background: rgba(194, 65, 12, 0.1);
+        }
+
+        .flow-arrow {
+            color: var(--color-accent);
+            font-size: 1.5rem;
+        }
+
+        /* Lists */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-success);
+            font-weight: 700;
+        }
+
+        /* Navigation Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            background: var(--color-surface);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--color-border);
+            z-index: 1000;
+        }
+
+        .btn { 
+            font-size: 1rem; 
+            padding: 0.6rem 1.5rem; 
+            border-radius: 999px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-family: var(--font-body);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary { 
+            background: var(--color-primary); 
+            color: white; 
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--color-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost { 
+            background: transparent; 
+            color: var(--color-text); 
+        }
+
+        .btn-ghost:hover:not(:disabled) {
+            background: var(--color-border);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Intro Decoration */
+        .intro-decoration {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .intro-decoration span {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Table Styles */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .styled-table th {
+            background: var(--color-primary);
+            color: white;
+            font-weight: 700;
+        }
+
+        .styled-table tr:hover {
+            background: rgba(14, 116, 144, 0.05);
+        }
+
+        /* Emoji Icons */
+        .emoji-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Section Divider */
+        .section-intro {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .section-intro .emoji-icon {
+            font-size: 4rem;
+        }
+
+        /* Two Column Layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-sm);
+            margin: 1rem 0;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .alert-info {
+            background: rgba(14, 116, 144, 0.1);
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .alert-tip {
+            background: rgba(22, 163, 74, 0.1);
+            border-left: 4px solid var(--color-success);
+        }
+
+        .alert-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">1 / 20</div>
+
+    <div class="slide-container">
+
+        <!-- ==================== SLIDE 1: Intro ==================== -->
+        <div class="slide active">
+            <p class="eyebrow">Web Development Basics</p>
+            <h1>Kurze Einführung in die Webentwicklung 🚀</h1>
+            <p style="font-size: 1.4rem; color: var(--color-muted); max-width: 600px;">
+                Einblick in die Sprache die das Internet spricht            
+            </p>
+            <div class="intro-decoration">
+                <span class="tag-pill tag-html">HTML</span>
+                <span class="tag-pill tag-css">CSS</span>
+                <span class="tag-pill tag-js">JavaScript</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2: Overview ==================== -->
+        <div class="slide">
+            <p class="eyebrow">Überblick</p>
+            <h2>Die drei Säulen des Webs</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon-box icon-html">📄</div>
+                    <h3>HTML</h3>
+                    <p>Das <strong>Skelett</strong> – definiert Struktur und Inhalt der Seite.</p>
+                    <p style="color: var(--color-muted); font-size: 0.9rem;">„Was steht auf der Seite?"</p>
+                </div>
+                <div class="card">
+                    <div class="icon-box icon-css">🎨</div>
+                    <h3>CSS</h3>
+                    <p>Das <strong>Styling</strong> – bestimmt Farben, Layouts und Animationen.</p>
+                    <p style="color: var(--color-muted); font-size: 0.9rem;">„Wie sieht es aus?"</p>
+                </div>
+                <div class="card">
+                    <div class="icon-box icon-js">⚡</div>
+                    <h3>JavaScript</h3>
+                    <p>Das <strong>Gehirn</strong> – macht die Seite interaktiv und dynamisch.</p>
+                    <p style="color: var(--color-muted); font-size: 0.9rem;">„Was passiert beim Klick?"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3: HTML Struktur ==================== -->
+        <div class="slide">
+            <p class="eyebrow">HTML Basics</p>
+            <h2>Aufbau eines HTML-Dokuments</h2>
+            <p>Jede Website beginnt mit dieser Grundstruktur:</p>
+            <div class="code-block html"><span class="comment">&lt;!-- 1. Dokumenttyp: Sagt dem Browser "Das ist HTML5" --&gt;</span>
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="string">"de"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- 2. Head: Unsichtbare Infos für Browser & Suchmaschinen --&gt;</span>
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Meine Website<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"style.css"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+
+  <span class="comment">&lt;!-- 3. Body: Alles, was man auf der Seite sieht --&gt;</span>
+  <span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;header&gt;</span>Navigation & Logo<span class="tag">&lt;/header&gt;</span>
+    <span class="tag">&lt;main&gt;</span>Hauptinhalt<span class="tag">&lt;/main&gt;</span>
+    <span class="tag">&lt;footer&gt;</span>Impressum & Links<span class="tag">&lt;/footer&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span></div>
+        </div>
+
+        <!-- ==================== SLIDE 4: HTML Tags 1 ==================== -->
+        <div class="slide">
+            <p class="eyebrow">HTML Basics</p>
+            <h2>Die wichtigsten HTML-Tags</h2>
+            <div class="two-col">
+                <div>
+                    <h3>📝 Text-Elemente</h3>
+                    <div class="code-block html"><span class="comment">&lt;!-- Überschriften (h1-h6) --&gt;</span>
+<span class="tag">&lt;h1&gt;</span>Hauptüberschrift<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Unterüberschrift<span class="tag">&lt;/h2&gt;</span>
+
+<span class="comment">&lt;!-- Absatz --&gt;</span>
+<span class="tag">&lt;p&gt;</span>Das ist ein Textabsatz.<span class="tag">&lt;/p&gt;</span>
+
+<span class="comment">&lt;!-- Hervorhebungen --&gt;</span>
+<span class="tag">&lt;strong&gt;</span>Fett<span class="tag">&lt;/strong&gt;</span>
+<span class="tag">&lt;em&gt;</span>Kursiv<span class="tag">&lt;/em&gt;</span>
+
+<span class="comment">&lt;!-- Link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"https://..."</span><span class="tag">&gt;</span>Klick mich<span class="tag">&lt;/a&gt;</span></div>
+                </div>
+                <div>
+                    <h3>🖼️ Medien & Container</h3>
+                    <div class="code-block html"><span class="comment">&lt;!-- Bild einfügen --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="string">"foto.jpg"</span> <span class="attr">alt</span>=<span class="string">"Beschreibung"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- Video einbetten --&gt;</span>
+<span class="tag">&lt;video</span> <span class="attr">src</span>=<span class="string">"clip.mp4"</span> <span class="attr">controls</span><span class="tag">&gt;&lt;/video&gt;</span>
+
+<span class="comment">&lt;!-- Container (keine Bedeutung, nur Gruppierung) --&gt;</span>
+<span class="tag">&lt;div&gt;</span>
+  Inhalt hier
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="comment">&lt;!-- Inline-Container --&gt;</span>
+<span class="tag">&lt;span&gt;</span>Text<span class="tag">&lt;/span&gt;</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5: HTML Tags 2 ==================== -->
+        <div class="slide">
+            <p class="eyebrow">HTML Basics</p>
+            <h2>Listen & Tabellen</h2>
+            <div class="two-col">
+                <div>
+                    <h3>📋 Listen</h3>
+                    <div class="code-block html"><span class="comment">&lt;!-- Ungeordnete Liste (Punkte) --&gt;</span>
+<span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Apfel<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Banane<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Kirsche<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span>
+
+<span class="comment">&lt;!-- Geordnete Liste (Zahlen) --&gt;</span>
+<span class="tag">&lt;ol&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Erster Schritt<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Zweiter Schritt<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span></div>
+                </div>
+                <div>
+                    <h3>📊 Tabellen</h3>
+                    <div class="code-block html"><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;thead&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Name<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Alter<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+  <span class="tag">&lt;tbody&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td&gt;</span>Anna<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>25<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+<span class="tag">&lt;/table&gt;</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6: HTML Formulare ==================== -->
+        <div class="slide">
+            <p class="eyebrow">HTML Basics</p>
+            <h2>Formulare & Eingaben</h2>
+            <p>So erstellst du interaktive Eingabefelder:</p>
+            <div class="code-block html"><span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="string">"/senden"</span> <span class="attr">method</span>=<span class="string">"POST"</span><span class="tag">&gt;</span>
+  
+  <span class="comment">&lt;!-- Textfeld --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="string">"name"</span><span class="tag">&gt;</span>Dein Name:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"name"</span> <span class="attr">placeholder</span>=<span class="string">"z.B. Anna"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- E-Mail-Feld (mit Validierung!) --&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="string">"email"</span> <span class="attr">placeholder</span>=<span class="string">"deine@email.de"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Passwort (wird versteckt) --&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">placeholder</span>=<span class="string">"Geheim..."</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Textarea für längere Texte --&gt;</span>
+  <span class="tag">&lt;textarea</span> <span class="attr">rows</span>=<span class="string">"4"</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+
+  <span class="comment">&lt;!-- Absende-Button --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="string">"submit"</span><span class="tag">&gt;</span>Absenden<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;/form&gt;</span></div>
+        </div>
+
+        <!-- ==================== SLIDE 7: CSS Intro ==================== -->
+        <div class="slide">
+            <div class="section-intro">
+                <span class="emoji-icon">🎨</span>
+                <h2>CSS – Cascading Style Sheets</h2>
+                <p style="font-size: 1.3rem; color: var(--color-muted);">
+                    Jetzt wird's bunt! CSS macht aus langweiligem HTML schöne Designs.
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: CSS Einbinden ==================== -->
+        <div class="slide">
+            <p class="eyebrow">CSS Basics</p>
+            <h2>CSS einbinden – 3 Wege</h2>
+            <div class="grid">
+                <div class="card card-accent">
+                    <h3>1. Externe Datei ⭐</h3>
+                    <p style="color: var(--color-success); font-weight: 700;">Best Practice!</p>
+                    <div class="code-block html"><span class="comment">&lt;!-- Im &lt;head&gt; --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> 
+      <span class="attr">href</span>=<span class="string">"style.css"</span><span class="tag">&gt;</span></div>
+                </div>
+                <div class="card">
+                    <h3>2. Im &lt;style&gt;-Tag</h3>
+                    <p style="color: var(--color-muted);">Für kleine Projekte</p>
+                    <div class="code-block html"><span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    <span class="property">body</span> { <span class="attr">color</span>: <span class="string">red</span>; }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span></div>
+                </div>
+                <div class="card">
+                    <h3>3. Inline-Style</h3>
+                    <p style="color: var(--color-warning);">Nur für Ausnahmen!</p>
+                    <div class="code-block html"><span class="tag">&lt;p</span> <span class="attr">style</span>=<span class="string">"color: blue;"</span><span class="tag">&gt;</span>
+  Blauer Text
+<span class="tag">&lt;/p&gt;</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 9: CSS Selektoren ==================== -->
+        <div class="slide">
+            <p class="eyebrow">CSS Basics</p>
+            <h2>Selektoren – Elemente ansprechen</h2>
+            <p>Mit Selektoren sagst du CSS, <em>welche</em> Elemente gestylt werden sollen:</p>
+            <div class="code-block css"><span class="comment">/* 1. Element-Selektor: Alle &lt;p&gt;-Tags */</span>
+<span class="tag">p</span> {
+  <span class="property">color</span>: <span class="string">darkgray</span>;
+}
+
+<span class="comment">/* 2. Klassen-Selektor: Alle Elemente mit class="highlight" */</span>
+<span class="tag">.highlight</span> {
+  <span class="property">background</span>: <span class="string">yellow</span>;
+}
+
+<span class="comment">/* 3. ID-Selektor: Das EINE Element mit id="logo" */</span>
+<span class="tag">#logo</span> {
+  <span class="property">width</span>: <span class="number">100px</span>;
+}
+
+<span class="comment">/* 4. Kombiniert: Nur &lt;a&gt; innerhalb von &lt;nav&gt; */</span>
+<span class="tag">nav a</span> {
+  <span class="property">text-decoration</span>: <span class="string">none</span>;
+}
+
+<span class="comment">/* 5. Pseudo-Klasse: Beim Hover */</span>
+<span class="tag">button:hover</span> {
+  <span class="property">transform</span>: <span class="string">scale(1.1)</span>;
+}</div>
+        </div>
+
+        <!-- ==================== SLIDE 10: CSS Wichtige Properties ==================== -->
+        <div class="slide">
+            <p class="eyebrow">CSS Basics</p>
+            <h2>Die wichtigsten CSS-Eigenschaften</h2>
+            <div class="two-col">
+                <div>
+                    <h3>🎨 Farben & Text</h3>
+                    <div class="code-block css"><span class="property">color</span>: <span class="string">#333</span>;          <span class="comment">/* Textfarbe */</span>
+<span class="property">background</span>: <span class="string">#f0f0f0</span>;   <span class="comment">/* Hintergrund */</span>
+<span class="property">font-size</span>: <span class="number">18px</span>;       <span class="comment">/* Schriftgröße */</span>
+<span class="property">font-weight</span>: <span class="string">bold</span>;     <span class="comment">/* Fett */</span>
+<span class="property">text-align</span>: <span class="string">center</span>;   <span class="comment">/* Zentrierung */</span></div>
+                    <h3 style="margin-top: 1.5rem;">📦 Box-Modell</h3>
+                    <div class="code-block css"><span class="property">width</span>: <span class="number">300px</span>;          <span class="comment">/* Breite */</span>
+<span class="property">padding</span>: <span class="number">20px</span>;         <span class="comment">/* Innenabstand */</span>
+<span class="property">margin</span>: <span class="number">10px</span>;          <span class="comment">/* Außenabstand */</span>
+<span class="property">border</span>: <span class="number">2px</span> <span class="string">solid</span> <span class="string">#000</span>; <span class="comment">/* Rahmen */</span>
+<span class="property">border-radius</span>: <span class="number">10px</span>;  <span class="comment">/* Runde Ecken */</span></div>
+                </div>
+                <div>
+                    <h3>✨ Layout & Effekte</h3>
+                    <div class="code-block css"><span class="comment">/* Flexbox (für Layouts!) */</span>
+<span class="property">display</span>: <span class="string">flex</span>;
+<span class="property">justify-content</span>: <span class="string">center</span>;
+<span class="property">align-items</span>: <span class="string">center</span>;
+<span class="property">gap</span>: <span class="number">20px</span>;
+
+<span class="comment">/* Schatten */</span>
+<span class="property">box-shadow</span>: <span class="number">0</span> <span class="number">4px</span> <span class="number">15px</span> <span class="string">rgba(0,0,0,0.1)</span>;
+
+<span class="comment">/* Animationen */</span>
+<span class="property">transition</span>: <span class="string">all 0.3s ease</span>;
+
+<span class="comment">/* Transparenz */</span>
+<span class="property">opacity</span>: <span class="number">0.8</span>;</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 11: CSS Beispiel ==================== -->
+        <div class="slide">
+            <p class="eyebrow">CSS in Aktion</p>
+            <h2>Vorher → Nachher</h2>
+            <div class="comparison">
+                <div class="card" style="text-align: center;">
+                    <p style="color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1rem;">Nur HTML:</p>
+                    <div style="text-align: left; font-family: serif;">
+                        <img src="5ffc420c-304b-4d32-b714-e9071673ae30.jpeg" style="width: 50px; border-radius: 0;">
+                        <h3 style="margin: 0.5rem 0 0 0; font-weight: normal;">Luisa Bräuer</h3>
+                        <p style="margin: 0;">Web Designerin</p>
+                        <button style="margin-top: 0.5rem;">Kontakt</button>
+                    </div>
+                </div>
+                <span class="comparison-arrow">→</span>
+                <div class="card card-fancy" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 1rem;">Mit CSS:</p>
+                    <img src="5ffc420c-304b-4d32-b714-e9071673ae30.jpeg" style="width: 80px; border-radius: 50%; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
+                    <h3 style="margin: 1rem 0 0.25rem 0;">Luisa Bräuer</h3>
+                    <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">✨ Web Designerin</p>
+                    <button style="margin-top: 1rem; background: white; color: #764ba2; border: none; padding: 0.6rem 1.5rem; border-radius: 999px; font-weight: 700; cursor: pointer;">Kontakt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 12: JavaScript Intro ==================== -->
+        <div class="slide">
+            <div class="section-intro">
+                <span class="emoji-icon">⚡</span>
+                <h2>JavaScript – Die Programmiersprache des Webs</h2>
+                <p style="font-size: 1.3rem; color: var(--color-muted);">
+                    Mach deine Website lebendig – mit Logik, Interaktion und Dynamik.
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 13: JS Einbinden ==================== -->
+        <div class="slide">
+            <p class="eyebrow">JavaScript Basics</p>
+            <h2>JavaScript einbinden</h2>
+            <div class="grid">
+                <div class="card card-accent">
+                    <h3>Externe Datei ⭐</h3>
+                    <p style="color: var(--color-success); font-weight: 700;">Empfohlen!</p>
+                    <div class="code-block html"><span class="comment">&lt;!-- Am Ende des &lt;body&gt; --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span></div>
+                </div>
+                <div class="card">
+                    <h3>Im &lt;script&gt;-Tag</h3>
+                    <div class="code-block html"><span class="tag">&lt;script&gt;</span>
+  <span class="function">console</span>.<span class="property">log</span>(<span class="string">'Hallo Welt!'</span>);
+<span class="tag">&lt;/script&gt;</span></div>
+                </div>
+            </div>
+            <div class="alert alert-tip" style="margin-top: 1.5rem;">
+                <span class="alert-icon">💡</span>
+                <div>
+                    <strong>Tipp:</strong> Öffne die Browser-Konsole mit <code class="code-inline">F12</code> → „Console", um <code class="code-inline">console.log()</code> Ausgaben zu sehen!
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 14: JS Grundkonzepte ==================== -->
+        <div class="slide">
+            <p class="eyebrow">JavaScript Basics</p>
+            <h2>Grundlegende Programmierkonzepte</h2>
+            <div class="code-block js"><span class="comment">// 1. VARIABLEN - Speichern von Werten</span>
+<span class="keyword">let</span> <span class="variable">name</span> = <span class="string">"Anna"</span>;           <span class="comment">// Kann sich ändern</span>
+<span class="keyword">const</span> <span class="variable">PI</span> = <span class="number">3.14159</span>;           <span class="comment">// Bleibt konstant</span>
+
+<span class="comment">// 2. DATENTYPEN</span>
+<span class="keyword">let</span> <span class="variable">zahl</span> = <span class="number">42</span>;                 <span class="comment">// Number</span>
+<span class="keyword">let</span> <span class="variable">text</span> = <span class="string">"Hallo"</span>;            <span class="comment">// String</span>
+<span class="keyword">let</span> <span class="variable">istWahr</span> = <span class="keyword">true</span>;            <span class="comment">// Boolean (true/false)</span>
+<span class="keyword">let</span> <span class="variable">liste</span> = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>];   <span class="comment">// Array (Liste)</span>
+<span class="keyword">let</span> <span class="variable">person</span> = {                  <span class="comment">// Object</span>
+  <span class="property">name</span>: <span class="string">"Anna"</span>,
+  <span class="property">alter</span>: <span class="number">25</span>
+};
+
+<span class="comment">// 3. FUNKTIONEN - Wiederverwendbarer Code</span>
+<span class="keyword">function</span> <span class="function">sagHallo</span>(<span class="variable">name</span>) {
+  <span class="keyword">return</span> <span class="string">"Hallo, "</span> + <span class="variable">name</span> + <span class="string">"!"</span>;
+}
+
+<span class="function">console</span>.<span class="property">log</span>(<span class="function">sagHallo</span>(<span class="string">"Welt"</span>));  <span class="comment">// → "Hallo, Welt!"</span></div>
+        </div>
+
+        <!-- ==================== SLIDE 15: JS Kontrollstrukturen ==================== -->
+        <div class="slide">
+            <p class="eyebrow">JavaScript Basics</p>
+            <h2>Bedingungen & Schleifen</h2>
+            <div class="two-col">
+                <div>
+                    <h3>🔀 If / Else</h3>
+                    <div class="code-block js"><span class="keyword">let</span> <span class="variable">alter</span> = <span class="number">18</span>;
+
+<span class="keyword">if</span> (<span class="variable">alter</span> >= <span class="number">18</span>) {
+  <span class="function">console</span>.<span class="property">log</span>(<span class="string">"Volljährig! 🎉"</span>);
+} <span class="keyword">else</span> {
+  <span class="function">console</span>.<span class="property">log</span>(<span class="string">"Noch nicht 18."</span>);
+}</div>
+                </div>
+                <div>
+                    <h3>🔄 Schleifen</h3>
+                    <div class="code-block js"><span class="comment">// For-Schleife</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> = <span class="number">0</span>; <span class="variable">i</span> < <span class="number">5</span>; <span class="variable">i</span>++) {
+  <span class="function">console</span>.<span class="property">log</span>(<span class="variable">i</span>);  <span class="comment">// 0,1,2,3,4</span>
+}
+
+<span class="comment">// Über Array iterieren</span>
+<span class="keyword">const</span> <span class="variable">farben</span> = [<span class="string">"rot"</span>, <span class="string">"grün"</span>, <span class="string">"blau"</span>];
+
+<span class="variable">farben</span>.<span class="function">forEach</span>(<span class="variable">farbe</span> => {
+  <span class="function">console</span>.<span class="property">log</span>(<span class="variable">farbe</span>);
+});</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 16: JS DOM ==================== -->
+        <div class="slide">
+            <p class="eyebrow">JavaScript Basics</p>
+            <h2>Das DOM – Elemente manipulieren</h2>
+            <p>Mit JavaScript kannst du HTML-Elemente finden, ändern und auf Aktionen reagieren:</p>
+            <div class="code-block js"><span class="comment">// 1. ELEMENT FINDEN</span>
+<span class="keyword">const</span> <span class="variable">button</span> = <span class="variable">document</span>.<span class="function">querySelector</span>(<span class="string">'.mein-button'</span>);
+<span class="keyword">const</span> <span class="variable">alleCards</span> = <span class="variable">document</span>.<span class="function">querySelectorAll</span>(<span class="string">'.card'</span>);
+<span class="keyword">const</span> <span class="variable">logo</span> = <span class="variable">document</span>.<span class="function">getElementById</span>(<span class="string">'logo'</span>);
+
+<span class="comment">// 2. INHALT ÄNDERN</span>
+<span class="variable">button</span>.<span class="property">textContent</span> = <span class="string">'Neuer Text'</span>;
+<span class="variable">button</span>.<span class="property">innerHTML</span> = <span class="string">'&lt;strong&gt;Fetter Text&lt;/strong&gt;'</span>;
+
+<span class="comment">// 3. STYLING ÄNDERN</span>
+<span class="variable">button</span>.<span class="property">style</span>.<span class="property">backgroundColor</span> = <span class="string">'coral'</span>;
+<span class="variable">button</span>.<span class="property">classList</span>.<span class="function">add</span>(<span class="string">'aktiv'</span>);
+<span class="variable">button</span>.<span class="property">classList</span>.<span class="function">toggle</span>(<span class="string">'versteckt'</span>);
+
+<span class="comment">// 4. AUF EVENTS REAGIEREN</span>
+<span class="variable">button</span>.<span class="function">addEventListener</span>(<span class="string">'click'</span>, () => {
+  <span class="function">alert</span>(<span class="string">'Button wurde geklickt!'</span>);
+});</div>
+        </div>
+
+        <!-- ==================== SLIDE 17: Moderne Webentwicklung ==================== -->
+        <div class="slide">
+            <p class="eyebrow">Modern Web Development</p>
+            <h2>Die Evolution des Webs</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">1990er</span>
+                    <p><strong>Statische Seiten</strong> – Nur HTML, jede Seite einzeln geschrieben</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2000er</span>
+                    <p><strong>PHP & jQuery</strong> – Dynamische Inhalte, einfachere DOM-Manipulation</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2010er</span>
+                    <p><strong>SPA-Frameworks</strong> – Angular, React, Vue: Apps im Browser</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Heute</span>
+                    <p><strong>Full-Stack Frameworks</strong> – Next.js, Nuxt, SvelteKit: Beste aus beiden Welten</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 18: Frameworks ==================== -->
+        <div class="slide">
+            <p class="eyebrow">Modern Web Development</p>
+            <h2>React & Next.js</h2>
+            <div class="two-col">
+                <div>
+                    <h3>⚛️ React</h3>
+                    <p>Eine JavaScript-Bibliothek für wiederverwendbare UI-Komponenten:</p>
+                    <div class="code-block js"><span class="comment">// Eine React-Komponente</span>
+<span class="keyword">function</span> <span class="function">Greeting</span>({ <span class="variable">name</span> }) {
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">h1</span>&gt;Hallo, {<span class="variable">name</span>}!&lt;/<span class="tag">h1</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Willkommen zurück 👋&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="comment">// Verwendung:</span>
+&lt;<span class="function">Greeting</span> <span class="attr">name</span>=<span class="string">"Anna"</span> /&gt;</div>
+                </div>
+                <div>
+                    <h3>▲ Next.js</h3>
+                    <p>Ein Framework auf React-Basis mit:</p>
+                    <ul class="feature-list">
+                        <li>Server-Side Rendering (SEO!)</li>
+                        <li>Automatisches Routing</li>
+                        <li>API-Routes im selben Projekt</li>
+                        <li>Optimierte Performance</li>
+                    </ul>
+                    <div class="alert alert-info">
+                        <span class="alert-icon">💡</span>
+                        <div>Am Ende wird alles zu <strong>HTML, CSS & JS</strong> kompiliert – das Einzige, was Browser verstehen!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 19: Browser & Internet ==================== -->
+        <div class="slide">
+            <p class="eyebrow">How it Works</p>
+            <h2>Wie funktioniert das Internet?</h2>
+            <div class="flow">
+                <div class="flow-box">👩‍💻 Du</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">🌐 Browser</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">📡 DNS</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box highlight">🖥️ Server</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box">📄 HTML/CSS/JS</div>
+            </div>
+            <div class="grid" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <h3>🌐 Was macht der Browser?</h3>
+                    <ul class="feature-list">
+                        <li>Sendet HTTP-Anfragen an Server</li>
+                        <li>Empfängt HTML, CSS, JS, Bilder</li>
+                        <li>Parsed HTML → baut DOM-Baum</li>
+                        <li>Wendet CSS an → Render Tree</li>
+                        <li>Führt JavaScript aus</li>
+                        <li>Zeichnet die Pixel auf dem Bildschirm</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>📡 DNS – Das Telefonbuch des Internets</h3>
+                    <p>Übersetzt lesbare Adressen in IP-Adressen:</p>
+                    <div class="code-block">google.com → 142.250.185.78
+github.com → 140.82.121.4</div>
+                    <p style="margin-top: 1rem;">Jeder Server hat eine eindeutige IP-Adresse!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 20: Backend ==================== -->
+        <div class="slide">
+            <p class="eyebrow">Backend Basics</p>
+            <h2>Frontend ↔ Backend</h2>
+            <div class="flow">
+                <div class="flow-box" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                    🎨 Frontend<br><small>Was du siehst</small>
+                </div>
+                <span class="flow-arrow">⟷</span>
+                <div class="flow-box" style="background: var(--color-primary); color: white;">
+                    📡 API<br><small>Schnittstelle</small>
+                </div>
+                <span class="flow-arrow">⟷</span>
+                <div class="flow-box" style="background: #1e293b; color: white;">
+                    ⚙️ Backend<br><small>Server-Logik</small>
+                </div>
+                <span class="flow-arrow">⟷</span>
+                <div class="flow-box" style="background: #16a34a; color: white;">
+                    🗄️ Datenbank<br><small>Speicher</small>
+                </div>
+            </div>
+            <div class="two-col" style="margin-top: 1.5rem;">
+                <div>
+                    <h3>📤 Request (Anfrage)</h3>
+                    <div class="code-block js"><span class="comment">// Frontend sendet Anfrage</span>
+<span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(
+  <span class="string">'https://api.example.com/users'</span>
+);
+
+<span class="keyword">const</span> <span class="variable">users</span> = <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+<span class="function">console</span>.<span class="property">log</span>(<span class="variable">users</span>);</div>
+                </div>
+                <div>
+                    <h3>📥 Response (Antwort)</h3>
+                    <div class="code-block js"><span class="comment">// Server antwortet mit JSON</span>
+{
+  <span class="property">"users"</span>: [
+    { <span class="property">"id"</span>: <span class="number">1</span>, <span class="property">"name"</span>: <span class="string">"Anna"</span> },
+    { <span class="property">"id"</span>: <span class="number">2</span>, <span class="property">"name"</span>: <span class="string">"Ben"</span> }
+  ],
+  <span class="property">"total"</span>: <span class="number">2</span>
+}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 21: Outro ==================== -->
+        <div class="slide">
+            <div class="section-intro">
+                <span class="emoji-icon">🎉</span>
+                <h2>Das war's – vorerst!</h2>
+                <p style="font-size: 1.3rem; color: var(--color-muted); max-width: 500px; margin: 0 auto;">
+                    Du kennst jetzt die Grundlagen von HTML, CSS und JavaScript – die Bausteine des Webs.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <span class="tag-pill tag-html" style="font-size: 1rem; padding: 0.6rem 1.2rem;">HTML ✓</span>
+                    <span class="tag-pill tag-css" style="font-size: 1rem; padding: 0.6rem 1.2rem;">CSS ✓</span>
+                    <span class="tag-pill tag-js" style="font-size: 1rem; padding: 0.6rem 1.2rem;">JavaScript ✓</span>
+                </div>
+                <p style="margin-top: 2rem; font-weight: 700; color: var(--color-primary);">
+                    Jetzt wird's praktisch! 🚀
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="controls">
+        <button class="btn btn-ghost" id="prevBtn" disabled>
+            ← Zurück
+        </button>
+        <button class="btn btn-primary" id="nextBtn">
+            Weiter →
+        </button>
+    </div>
+
+    <script>
+        console.log("Hallo Welt!")
+        const slides = document.querySelectorAll('.slide');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        let current = 0;
+
+        function updateSlide() {
+            // Update active slide
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === current);
+            });
+
+            // Update button states
+            prevBtn.disabled = current === 0;
+            nextBtn.disabled = current === slides.length - 1;
+
+            // Update button text
+            if (current === slides.length - 1) {
+                nextBtn.textContent = '🎉 Fertig!';
+            } else {
+                nextBtn.textContent = 'Weiter →';
+            }
+
+            // Update progress bar
+            const progress = ((current + 1) / slides.length) * 100;
+            progressBar.style.width = progress + '%';
+            progressText.textContent = `${current + 1} / ${slides.length}`;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (current < slides.length - 1) {
+                current++;
+                updateSlide();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (current > 0) {
+                current--;
+                updateSlide();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && current < slides.length - 1) {
+                current++;
+                updateSlide();
+            }
+            if (e.key === 'ArrowLeft' && current > 0) {
+                current--;
+                updateSlide();
+            }
+        });
+
+        // Initialize
+        updateSlide();
+        
+        function sagHallo(name) {
+          return "Hallo, " + name + "!";
+        }
+    </script>
+</body>
+</html>
