@@ -6,6 +6,57 @@
 (function () {
   "use strict";
 
+  const THEME_KEY = "girlsday-theme";
+
+  function getTheme() {
+    var t = document.documentElement.getAttribute("data-theme");
+    return t === "dark" || t === "light" ? t : "light";
+  }
+
+  function setThemeButtonUi(theme) {
+    var btn = document.getElementById("theme-toggle");
+    if (!btn) {
+      return;
+    }
+    var isDark = theme === "dark";
+    btn.setAttribute("aria-pressed", isDark ? "true" : "false");
+    btn.setAttribute(
+      "title",
+      isDark ? "Zu hellem Farbschema wechseln" : "Zu dunklem Farbschema wechseln"
+    );
+    btn.setAttribute(
+      "aria-label",
+      isDark ? "Farbschema: Dunkel. Zu Hell wechseln." : "Farbschema: Hell. Zu Dunkel wechseln."
+    );
+    var label = btn.querySelector("[data-theme-label]");
+    if (label) {
+      label.textContent = isDark ? "Hell" : "Dunkel";
+    }
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (e) {
+      /* private mode etc. */
+    }
+    setThemeButtonUi(theme);
+  }
+
+  function initThemeToggle() {
+    setThemeButtonUi(getTheme());
+    var btn = document.getElementById("theme-toggle");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        var next = getTheme() === "dark" ? "light" : "dark";
+        applyTheme(next);
+      });
+    }
+  }
+
+  initThemeToggle();
+
   const actionBtn = document.getElementById("action-btn");
   const jsMessage = document.getElementById("js-message");
   const counterBtn = document.getElementById("counter-btn");
