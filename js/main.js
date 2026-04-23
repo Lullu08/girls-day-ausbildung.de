@@ -9,6 +9,7 @@
   const actionBtn = document.getElementById("action-btn");
   const jsMessage = document.getElementById("js-message");
   const counterBtn = document.getElementById("counter-btn");
+  const resetBtn = document.getElementById("counter-btn-reset");
   const counterDisplay = document.getElementById("counter-display");
   const counterValue = document.getElementById("counter-value");
   const pokemonBtn = document.getElementById("pokemon-btn");
@@ -20,7 +21,7 @@
       // TASK 5: Beim Klick Text ändern, z. B.:
       // jsMessage.textContent = "Dein neuer Text!";
       jsMessage.textContent =
-        "Super – der Button funktioniert. Passe diese Nachricht in main.js an!";
+        "Ach du grüne Neune! Der Button hat dich wieder dumm gemacht!";
     });
   }
 
@@ -36,6 +37,12 @@
       counterValue.textContent = String(count);
     });
   }
+  if (resetBtn && counterValue && counterDisplay) {
+    resetBtn.addEventListener("click", function () {
+      count = 0;
+      counterValue.textContent = String(count);
+    });
+  }
 
   // TASK 7: Pokémon von der API laden (async/await)
   // Endpunkt-Beispiel: https://pokeapi.co/api/v2/pokemon/pikachu
@@ -47,13 +54,13 @@
 
       try {
         // TASK 7: fetch – siehe TASKS.md
-        // z. B. const res = await fetch("https://pokeapi.co/api/v2/pokemon/pikachu");
-        // if (!res.ok) throw new Error("HTTP " + res.status);
-        // const data = await res.json();
-        // apiOutput.innerHTML = `<p><strong>...</strong></p><img ... />`;
+        const res = await fetch("https://pokeapi.co/api/v2/pokemon/pikachu");
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        apiOutput.innerHTML = `<p><strong>Pikachoo-choo</strong></p><img src="${data.sprites.front_default}" alt="Pikachoo-choo ist nicht da. Er arbeitet bei der DB..." />`;
 
-        apiOutput.innerHTML =
-          "<p>Implementiere Aufgabe 7 in <code>main.js</code> – dann erscheinen hier Name und Bild eines Pokémon.</p>";
+        //apiOutput.innerHTML =
+          //"<p>Implementiere Aufgabe 7 in <code>main.js</code> – dann erscheinen hier Name und Bild eines Pokémon.</p>";
       } catch (err) {
         apiOutput.innerHTML =
           '<p class="error">Etwas ist schiefgelaufen. Nutze eine lokale Server-URL (siehe README) und prüfe die Konsole.</p>';
