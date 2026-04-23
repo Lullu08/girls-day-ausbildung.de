@@ -1,20 +1,8 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="light">
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      (function () {
-        try {
-          var stored = localStorage.getItem("girlsday-theme");
-          if (stored === "dark" || stored === "light") {
-            document.documentElement.setAttribute("data-theme", stored);
-          } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            document.documentElement.setAttribute("data-theme", "dark");
-          }
-        } catch (e) {}
-      })();
-    </script>
     <!-- TASK 1: Ändere den Seitentitel -->
     <title>Girls Day – Web-Workshop</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -39,45 +27,6 @@
             <a href="TASKS.md">TASKS.md</a> (in deinem Editor öffnen).
           </p>
         </div>
-        <button
-          type="button"
-          class="theme-toggle"
-          id="theme-toggle"
-          aria-pressed="false"
-          title="Farbschema umschalten"
-        >
-          <span class="theme-toggle__icon" aria-hidden="true"
-            ><svg
-              class="theme-toggle__sun"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="12" cy="12" r="4" />
-              <path
-                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-                stroke-linecap="round"
-              />
-            </svg>
-            <svg
-              class="theme-toggle__moon"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M21 12.8A7.5 7.5 0 1111.2 3a6 6 0 109.8 9.8z"
-                stroke="none"
-              />
-            </svg>
-          </span>
-          <span class="theme-toggle__label" data-theme-label>Farbschema</span>
-        </button>
       </div>
     </header>
 
@@ -118,11 +67,14 @@
           <button type="button" class="btn btn-primary" id="action-btn">
             Aktion
           </button>
-          <button type="button" class="btn btn-ghost" id="counter-btn" hidden>
+          <button type="button" class="btn btn-ghost" id="counter-btn">
             Zähler
           </button>
+          <button type="button" class="btn btn-ghost" id="counter-btn-reset">
+            Reset
+          </button>
         </div>
-        <p class="counter-display" id="counter-display" hidden>
+        <p class="counter-display" id="counter-display">
           Zähler: <span id="counter-value">0</span>
         </p>
       </section>
