@@ -48,8 +48,6 @@ Arbeite die Liste von oben nach unten ab. Speichere die Datei nach jeder Änderu
 1. `--color-primary` auf eine andere Farbe setzen (z. B. ein Kräftiges Grün oder Blau als Hex `#16a34a`).
 2. `--radius` vergrößern oder verkleinern und beobachten, wie „rund“ die Karten werden.
 
-**Tipp:** Mit `prefers-color-scheme` gibt es auch **Dark-Mode**-Farben weiter unten – du kannst dort mitspielen.
-
 **Stretch:** Eine neue Variable `--color-highlight` anlegen und irgendwo mit `var(--color-highlight)` verwenden.
 
 ---
