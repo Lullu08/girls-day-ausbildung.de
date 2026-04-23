@@ -7,6 +7,7 @@
   "use strict";
 
   const actionBtn = document.getElementById("action-btn");
+  const resetBtn = document.getElementById("counter-btn-reset")
   const jsMessage = document.getElementById("js-message");
   const counterBtn = document.getElementById("counter-btn");
   const counterDisplay = document.getElementById("counter-display");
@@ -20,10 +21,9 @@
       // TASK 5: Beim Klick Text ändern, z. B.:
       // jsMessage.textContent = "Dein neuer Text!";
       jsMessage.textContent =
-        "Super – der Button funktioniert. Passe diese Nachricht in main.js an!";
+        "Wie geht es dir?";
     });
   }
-
   // TASK 6: Zähler – entferne die Kommentare unten und baue den Zähler aus.
   // Tipp: Zeige counterBtn und counterDisplay (classList.remove('hidden') reicht nicht;
   // im HTML steht hidden – nutze .removeAttribute('hidden') oder entferne hidden im HTML).
@@ -32,7 +32,14 @@
 
   if (counterBtn && counterValue && counterDisplay) {
     counterBtn.addEventListener("click", function () {
-      count += 1;
+      count += 67;
+      counterValue.textContent = String(count);
+    });
+  }
+
+  if (resetBtn && counterValue && counterDisplay) {
+    resetBtn.addEventListener("click", function () {
+      count = 0;
       counterValue.textContent = String(count);
     });
   }
@@ -47,13 +54,11 @@
 
       try {
         // TASK 7: fetch – siehe TASKS.md
-        // z. B. const res = await fetch("https://pokeapi.co/api/v2/pokemon/pikachu");
-        // if (!res.ok) throw new Error("HTTP " + res.status);
-        // const data = await res.json();
-        // apiOutput.innerHTML = `<p><strong>...</strong></p><img ... />`;
+         const res = await fetch("https://pokeapi.co/api/v2/pokemon/pikachu");
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        apiOutput.innerHTML = `<p><strong>${data.name}</strong></p><img src="${data.sprites.front_default}" />`;
 
-        apiOutput.innerHTML =
-          "<p>Implementiere Aufgabe 7 in <code>main.js</code> – dann erscheinen hier Name und Bild eines Pokémon.</p>";
       } catch (err) {
         apiOutput.innerHTML =
           '<p class="error">Etwas ist schiefgelaufen. Nutze eine lokale Server-URL (siehe README) und prüfe die Konsole.</p>';

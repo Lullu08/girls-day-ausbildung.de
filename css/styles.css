@@ -1,20 +1,20 @@
 /* TASK 3: Farben und Radius in :root anpassen */
 :root {
-  --color-bg: #f6f3ee;
-  --color-surface: #ffffff;
+  --color-bg: #faffc7;
+  --color-surface: #aaf0eb;
   --color-text: #1c1917;
   --color-muted: #57534e;
-  --color-primary: #c2410c;
-  --color-primary-hover: #9a3412;
+  --color-primary: #f881df;
+  --color-primary-hover: #ff51f3;
   --color-accent: #0e7490;
-  --color-border: #e7e5e4;
-  --radius: 14px;
+  --color-border: #d399ff;
+  --radius: 67px;
   --shadow: 0 18px 40px rgb(28 25 23 / 8%);
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Source Sans 3", system-ui, sans-serif;
   --space: clamp(1rem, 4vw, 1.75rem);
   --max: 40rem;
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 *,
